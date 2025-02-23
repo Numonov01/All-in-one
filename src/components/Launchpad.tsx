@@ -58,10 +58,7 @@ export default function Launchpad({ show, toggleLaunchpad }: LaunchpadProps) {
           />
         </div>
 
-        <div
-          className="max-w-[1100px] mx-auto mt-8 w-full px-4 sm:px-10"
-          grid="~ flow-row cols-4 sm:cols-7"
-        >
+        <div className="max-w-[1100px] mx-auto mt-8 w-full px-4 sm:px-10 grid grid-cols-5 gap-4 ">
           {search().map((app) => (
             <div key={`launchpad-${app.id}`} h="32 sm:36" flex="~ col">
               <a

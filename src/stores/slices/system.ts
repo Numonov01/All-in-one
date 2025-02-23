@@ -37,6 +37,7 @@ export const createSystemSlice: StateCreator<SystemSlice> = (set) => ({
   toggleAirdrop: () => set((state) => ({ airdrop: !state.airdrop })),
   toggleFullScreen: (v) =>
     set(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       v ? enterFullScreen() : exitFullScreen();
       return { fullscreen: v };
     }),

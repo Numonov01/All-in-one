@@ -61,37 +61,6 @@ export default function Login(props: MacActions) {
           {sign}
         </div>
       </div>
-
-      {/* buttons */}
-      <div className="text-sm fixed bottom-16 inset-x-0 mx-auto flex flex-row space-x-4 w-max">
-        <div
-          className="hstack flex-col text-white w-24 cursor-pointer"
-          onClick={(e) => props.sleepMac(e)}
-        >
-          <div className="flex-center size-10 bg-gray-700 rounded-full">
-            <span className="i-gg:sleep text-[40px]" />
-          </div>
-          <span>Sleep</span>
-        </div>
-        <div
-          className="hstack flex-col text-white w-24 cursor-pointer"
-          onClick={(e) => props.restartMac(e)}
-        >
-          <div className="flex-center size-10 bg-gray-700 rounded-full">
-            <span className="i-ri:restart-line text-4xl" />
-          </div>
-          <span>Restart</span>
-        </div>
-        <div
-          className="hstack flex-col text-white w-24 cursor-pointer"
-          onClick={(e) => props.shutMac(e)}
-        >
-          <div className="flex-center size-10 bg-gray-700 rounded-full">
-            <span className="i-ri:shut-down-line text-4xl" />
-          </div>
-          <span>Shut Down</span>
-        </div>
-      </div>
     </div>
   );
 }

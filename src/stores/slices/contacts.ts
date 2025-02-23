@@ -1,16 +1,18 @@
 import type { StateCreator } from "zustand";
 
-export interface UserSlice {
-  typoraMd: string;
-  setTyporaMd: (v: string) => void;
-  faceTimeImages: { [date: string]: string };
+export interface PcContacts {
+  contactsMd: string;
+  setContactsMd: (v: string) => void;
+  faceTimeImages: {
+    [date: string]: string;
+  };
   addFaceTimeImage: (v: string) => void;
   delFaceTimeImage: (k: string) => void;
 }
 
-export const createUserSlice: StateCreator<UserSlice> = (set) => ({
-  typoraMd: `# Hi 👋\nThis is a simple clone of [Typora](https://typora.io/). Built oWYSIWYG markdown editor.`,
-  setTyporaMd: (v) => set(() => ({ typoraMd: v })),
+export const createUserContacts: StateCreator<PcContacts> = (set) => ({
+  contactsMd: `# Hi 👋\nBu men Contacts`,
+  setContactsMd: (v) => set(() => ({ contactsMd: v })),
   faceTimeImages: {},
   addFaceTimeImage: (v) =>
     set((state) => {

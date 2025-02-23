@@ -1,7 +1,5 @@
 import React from "react";
-import { format } from "date-fns";
 import { isFullScreen } from "~/utils";
-import { music } from "~/configs";
 import type { MacActions } from "~/types";
 
 interface TopBarItemProps {
@@ -35,20 +33,6 @@ const TopBarItem = forwardRef(
   }
 );
 
-const CCMIcon = ({ size }: { size: number }) => {
-  return (
-    <svg
-      viewBox="0 0 29 29"
-      width={size}
-      height={size}
-      xmlns="http://www.w3.org/2000/svg"
-      fill="currentColor"
-    >
-      <path d="M7.5,13h14a5.5,5.5,0,0,0,0-11H7.5a5.5,5.5,0,0,0,0,11Zm0-9h14a3.5,3.5,0,0,1,0,7H7.5a3.5,3.5,0,0,1,0-7Zm0,6A2.5,2.5,0,1,0,5,7.5,2.5,2.5,0,0,0,7.5,10Zm14,6H7.5a5.5,5.5,0,0,0,0,11h14a5.5,5.5,0,0,0,0-11Zm1.43439,8a2.5,2.5,0,1,1,2.5-2.5A2.5,2.5,0,0,1,22.93439,24Z" />
-    </svg>
-  );
-};
-
 interface TopBarProps extends MacActions {
   title: string;
   setSpotlightBtnRef: (value: React.RefObject<HTMLDivElement>) => void;
@@ -57,74 +41,29 @@ interface TopBarProps extends MacActions {
 }
 
 interface TopBarState {
-  date: Date;
   showControlCenter: boolean;
-  showWifiMenu: boolean;
   showAppleMenu: boolean;
 }
 
 const TopBar = (props: TopBarProps) => {
   const appleBtnRef = useRef<HTMLDivElement>(null);
-  const controlCenterBtnRef = useRef<HTMLDivElement>(null);
-  const wifiBtnRef = useRef<HTMLDivElement>(null);
-  const spotlightBtnRef = useRef<HTMLDivElement>(null);
 
   const [state, setState] = useState<TopBarState>({
-    date: new Date(),
     showControlCenter: false,
-    showWifiMenu: false,
     showAppleMenu: false
   });
 
-  /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  const [audio, audioState, controls, audioRef] = useAudio({
-    src: music.audio,
-    autoReplay: true
-  });
   const { winWidth, winHeight } = useWindowSize();
-
-  const { volume, wifi } = useStore((state) => ({
-    volume: state.volume,
-    wifi: state.wifi
-  }));
-  const { toggleFullScreen, setVolume, setBrightness } = useStore((state) => ({
+  const { toggleFullScreen } = useStore((state) => ({
     toggleFullScreen: state.toggleFullScreen,
     setVolume: state.setVolume,
     setBrightness: state.setBrightness
   }));
 
-  useInterval(() => {
-    setState({
-      ...state,
-      date: new Date()
-    });
-  }, 60 * 1000);
-
-  useEffect(() => {
-    props.setSpotlightBtnRef(spotlightBtnRef);
-    controls.volume(volume / 100);
-  }, []);
-
   useEffect(() => {
     const isFull = isFullScreen();
     toggleFullScreen(isFull);
   }, [winWidth, winHeight]);
-
-  const setAudioVolume = (value: number): void => {
-    setVolume(value);
-    controls.volume(value / 100);
-  };
-
-  const setSiteBrightness = (value: number): void => {
-    setBrightness(value);
-  };
-
-  const toggleControlCenter = (): void => {
-    setState({
-      ...state,
-      showControlCenter: !state.showControlCenter
-    });
-  };
 
   const toggleAppleMenu = (): void => {
     setState({
@@ -133,32 +72,26 @@ const TopBar = (props: TopBarProps) => {
     });
   };
 
-  const toggleWifiMenu = (): void => {
-    setState({
-      ...state,
-      showWifiMenu: !state.showWifiMenu
-    });
-  };
-
   const logout = (): void => {
-    controls.pause();
     props.setLogin(false);
   };
 
-  const shut = (e: React.MouseEvent<HTMLLIElement>): void => {
-    controls.pause();
-    props.shutMac(e);
-  };
+  const [showNotifications, setShowNotifications] = useState(false);
 
-  const restart = (e: React.MouseEvent<HTMLLIElement>): void => {
-    controls.pause();
-    props.restartMac(e);
-  };
-
-  const sleep = (e: React.MouseEvent<HTMLLIElement>): void => {
-    controls.pause();
-    props.sleepMac(e);
-  };
+  const notifications = [
+    {
+      id: 1,
+      title: "System Error",
+      message: "Something went wrong!",
+      icon: "i-bx:bx-error"
+    },
+    {
+      id: 2,
+      title: "Update Available",
+      message: "A new version is ready!",
+      icon: "i-bx:bx-upvote"
+    }
+  ];
 
   return (
     <div
@@ -173,7 +106,7 @@ const TopBar = (props: TopBarProps) => {
           onClick={toggleAppleMenu}
           ref={appleBtnRef}
         >
-          <span className="i-ri:apple-fill text-base" />
+          <img src="/img/sites/datagaze-logo.svg" alt="Datagaze" className="w-6 h-6" />
         </TopBarItem>
         <TopBarItem
           className="font-semibold px-2"
@@ -189,61 +122,49 @@ const TopBar = (props: TopBarProps) => {
       {state.showAppleMenu && (
         <AppleMenu
           logout={logout}
-          shut={shut}
-          restart={restart}
-          sleep={sleep}
           toggleAppleMenu={toggleAppleMenu}
           btnRef={appleBtnRef}
         />
       )}
 
-      <div className="hstack flex-row justify-end space-x-2">
-        <TopBarItem hideOnMobile={true}>
-          <Battery />
+      <div className="hstack flex-row justify-end space-x-5">
+        <TopBarItem onClick={() => window.open("https://www.datagaze.uz/", "_blank")}>
+          <span className="i-bx:bx-globe text-[17px]" />
+          <span>Go to website</span>
         </TopBarItem>
-        <TopBarItem
-          hideOnMobile={true}
-          forceHover={state.showWifiMenu}
-          onClick={toggleWifiMenu}
-          ref={wifiBtnRef}
-        >
-          {wifi ? (
-            <span className="i-material-symbols:wifi text-lg" />
-          ) : (
-            <span className="i-material-symbols:wifi-off text-lg" />
+
+        <TopBarItem onClick={() => setShowNotifications(!showNotifications)}>
+          <span className="i-bx:bx-bell text-[17px]" />
+          <span>Notifications</span>
+          {notifications.length > 0 && (
+            <span className="bg-grey-500 text-white text-sm px-1 rounded-full">
+              {notifications.length}
+            </span>
           )}
         </TopBarItem>
-        <TopBarItem ref={spotlightBtnRef} onClick={props.toggleSpotlight}>
-          <span className="i-bx:search text-[17px]" />
-        </TopBarItem>
-        <TopBarItem
-          forceHover={state.showControlCenter}
-          onClick={toggleControlCenter}
-          ref={controlCenterBtnRef}
-        >
-          <CCMIcon size={16} />
-        </TopBarItem>
-
-        {/* Open this when clicking on Wifi button */}
-        {state.showWifiMenu && (
-          <WifiMenu toggleWifiMenu={toggleWifiMenu} btnRef={wifiBtnRef} />
-        )}
-
-        {/* Open this when clicking on Control Center button */}
-        {state.showControlCenter && (
-          <ControlCenterMenu
-            playing={audioState.playing}
-            toggleAudio={controls.toggle}
-            setVolume={setAudioVolume}
-            setBrightness={setSiteBrightness}
-            toggleControlCenter={toggleControlCenter}
-            btnRef={controlCenterBtnRef}
-          />
+        {showNotifications && (
+          <div className="absolute top-12 right-5 w-80 space-y-3">
+            {notifications.map((notif) => (
+              <div
+                key={notif.id}
+                className="flex items-start space-x-3 bg-white/50 backdrop-blur-lg p-4 rounded-2xl shadow-xl"
+              >
+                <div className="flex h-10 w-10 items-center justify-center bg-white rounded-lg">
+                  <span className={`${notif.icon} text-blue-500 text-2xl`} />
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">{notif.title}</p>
+                  <p className="text-gray-700 text-sm">{notif.message}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
 
         <TopBarItem>
-          <span>{format(state.date, "eee MMM d")}</span>
-          <span>{format(state.date, "h:mm aa")}</span>
+          <span className="i-bx:bxs-smile text-[17px]" />
+          <span>Jam</span>
+          <span className="i-bx:bx-chevron-down text-[17px]" />
         </TopBarItem>
       </div>
     </div>

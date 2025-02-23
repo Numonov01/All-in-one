@@ -4,18 +4,19 @@ import { commonmark } from "@milkdown/preset-commonmark";
 import { gfm } from "@milkdown/preset-gfm";
 import { history } from "@milkdown/plugin-history";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
+import LicenseAppsTable from "./Table/AppsTable";
 
 const MilkdownEditor = () => {
-  const { typoraMd, setTyporaMd } = useStore((state) => ({
-    typoraMd: state.typoraMd,
-    setTyporaMd: state.setTyporaMd
+  const { licensesMd, setLicensesMd } = useStore((state) => ({
+    licensesMd: state.licensesMd,
+    setLicensesMd: state.setLicensesMd
   }));
 
   useEditor((root) =>
     Editor.make()
       .config((ctx) => {
         ctx.set(rootCtx, root);
-        ctx.set(defaultValueCtx, typoraMd);
+        ctx.set(defaultValueCtx, licensesMd);
         ctx
           .get(listenerCtx)
           .mounted((ctx) => {
@@ -25,10 +26,10 @@ const MilkdownEditor = () => {
             ) as HTMLDivElement;
             wrapper.onclick = () => editor?.focus();
           })
-          .markdownUpdated((_, markdown) => setTyporaMd(markdown));
+          .markdownUpdated((_, markdown) => setLicensesMd(markdown));
 
         root.className =
-          "typora bg-white dark:bg-gray-800 text-c-700 h-full overflow-y-scroll";
+          "licenses bg-black dark:bg-gray-800 text-c-700 h-full overflow-y-scroll";
       })
       .use(listener)
       .use(commonmark)
@@ -39,10 +40,14 @@ const MilkdownEditor = () => {
   return <Milkdown />;
 };
 
-export default function Typora() {
+export default function Licenses() {
   return (
-    <MilkdownProvider>
-      <MilkdownEditor />
-    </MilkdownProvider>
+    <>
+      <MilkdownProvider>
+        <div className="size-full bg-white/80 overflow-auto">
+          <LicenseAppsTable />
+        </div>
+      </MilkdownProvider>
+    </>
   );
 }

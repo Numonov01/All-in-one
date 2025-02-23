@@ -31,7 +31,7 @@ export default function Desktop(props: MacActions) {
     minApps: {},
     maxZ: 2,
     showLaunchpad: false,
-    currentTitle: "Finder",
+    currentTitle: "DataGaze LTD 2025",
     hideDockAndTopbar: false,
     spotlight: false
   } as DesktopState);
@@ -254,10 +254,14 @@ export default function Desktop(props: MacActions) {
         hide={state.hideDockAndTopbar}
         setSpotlightBtnRef={setSpotlightBtnRef}
       />
-
       {/* Desktop Apps */}
       <div className="window-bound z-10 absolute" style={{ top: minMarginY }}>
         {renderAppWindows()}
+      </div>
+
+      {/* Good afternoon Jam */}
+      <div className="fixed inset-0 flex items-center justify-center">
+        <Jam />
       </div>
 
       {/* Spotlight */}
