@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Search, Tune, ViewColumn } from "@mui/icons-material";
-import AboutPcModal from "./AboutPcModal";
+import UploadModal from "~/components/modals/upload";
 
 // Table ustunlari
 const columns = [
@@ -251,7 +251,8 @@ const LicenseAppsTable = () => {
                   </TableCell>
                 </TableRow>
               ))}
-            <AboutPcModal open={modalOpen} onClose={() => setModalOpen(false)} />
+            {/* Upload Modal */}
+            <UploadModal open={modalOpen} onClose={() => setModalOpen(false)} />
           </TableBody>
         </MuiTable>
       </TableContainer>

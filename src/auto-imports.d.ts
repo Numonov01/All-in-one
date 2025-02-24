@@ -46,6 +46,7 @@ declare global {
   const memo: typeof import('react')['memo']
   const startTransition: typeof import('react')['startTransition']
   const tablethr: (typeof import("./components/apps/Table/tablethr"))["default"]
+  const upload: typeof import('./components/modals/upload')['default']
   const useAudio: typeof import('./hooks/useAudio')['useAudio']
   const useBattery: typeof import('./hooks/useBattery')['useBattery']
   const useCallback: typeof import('react')['useCallback']
@@ -68,6 +69,6 @@ declare global {
   const useSyncExternalStore: typeof import('react')['useSyncExternalStore']
   const useTransition: typeof import('react')['useTransition']
   const useUploadModal: (typeof import("./components/apps/Table/useModalStore"))["useUploadModal"]
-  const useUploadStore: (typeof import("./components/apps/Table/useUpload"))["useUploadStore"]
+  const useUploadStore: typeof import('./components/modals/uploadStore')['useUploadStore']
   const useWindowSize: typeof import('./hooks/useWindowSize')['useWindowSize']
 }
