@@ -84,7 +84,7 @@ const HowDare = ({ setRMRF }: { setRMRF: (value: boolean) => void }) => {
   );
 };
 
-export default class Terminal extends React.Component<{}, TerminalState> {
+export default class Terminal extends React.Component<object, TerminalState> {
   private history = [] as string[];
   private curHistory = 0;
   private curInputTimes = 0;
@@ -94,7 +94,7 @@ export default class Terminal extends React.Component<{}, TerminalState> {
     [key: string]: { (): void } | { (arg?: string): void };
   };
 
-  constructor(props: {}) {
+  constructor(props: object) {
     super(props);
     this.state = {
       content: [],
@@ -348,7 +348,7 @@ export default class Terminal extends React.Component<{}, TerminalState> {
         </div>
         <input
           id={`terminal-input-${id}`}
-          className="flex-1 px-1 text-white outline-none bg-transparent"
+          className="flex-1 px-1 text-black outline-none bg-transparent"
           onKeyDown={this.keyPress}
           autoFocus={true}
         />
@@ -369,16 +369,16 @@ export default class Terminal extends React.Component<{}, TerminalState> {
   render() {
     return (
       <div
-        className="terminal font-terminal font-normal relative h-full bg-gray-800/90 overflow-y-scroll"
-        text="white sm"
+        className="terminal font-terminal font-normal relative h-full bg-white/50 overflow-y-scroll"
+        text="black sm"
         onClick={() => this.focusOnInput(this.curInputTimes)}
       >
         {this.state.rmrf && (
           <HowDare setRMRF={(value: boolean) => this.setState({ rmrf: value })} />
         )}
         <div p="y-2 x-1.5">
-          <span className="text-green-300">ヽ(ˋ▽ˊ)ノ</span>: Hey, you found the terminal!
-          Type `help` to get started.
+          <span className="text-green">ヽ(ˋ▽ˊ)ノ</span>: Hey, you found the terminal! Type
+          `help` to get started.
         </div>
         <div id="terminal-content" p="x-1.5 b-2">
           {this.state.content}

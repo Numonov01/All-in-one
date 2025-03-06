@@ -15,7 +15,6 @@ import {
   Button
 } from "@mui/material";
 import { Tune, ViewColumn, Search } from "@mui/icons-material";
-import AboutPcModal from "./AboutPcModal";
 
 // Table ustunlari
 const columns = [
@@ -182,7 +181,9 @@ const InstalledTable = () => {
                   </TableCell>
                 </TableRow>
               ))}
-            <AboutPcModal open={modalOpen} onClose={() => setModalOpen(false)} />
+            <AboutPc open={modalOpen} onClose={() => setModalOpen(false)} />
+            {/* <AppModal open={modalOpen} onClose={() => setModalOpen(false)} /> */}
+            {/* <InstallModal open={modalOpen} onClose={() => setModalOpen(false)} /> */}
           </TableBody>
         </MuiTable>
       </TableContainer>

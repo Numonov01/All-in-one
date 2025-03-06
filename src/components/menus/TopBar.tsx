@@ -1,6 +1,6 @@
 import React from "react";
 import { isFullScreen } from "~/utils";
-import type { MacActions } from "~/types";
+import type { LoginActions } from "~/types";
 
 interface TopBarItemProps {
   hideOnMobile?: boolean;
@@ -33,7 +33,7 @@ const TopBarItem = forwardRef(
   }
 );
 
-interface TopBarProps extends MacActions {
+interface TopBarProps extends LoginActions {
   title: string;
   setSpotlightBtnRef: (value: React.RefObject<HTMLDivElement>) => void;
   hide: boolean;

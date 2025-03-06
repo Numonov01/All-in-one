@@ -1,7 +1,7 @@
 import React from "react";
 import { apps, wallpapers } from "~/configs";
 import { minMarginY } from "~/utils";
-import type { MacActions } from "~/types";
+import type { LoginActions } from "~/types";
 
 interface DesktopState {
   showApps: {
@@ -23,7 +23,7 @@ interface DesktopState {
   spotlight: boolean;
 }
 
-export default function Desktop(props: MacActions) {
+export default function Desktop(props: LoginActions) {
   const [state, setState] = useState({
     showApps: {},
     appsZ: {},
@@ -247,9 +247,6 @@ export default function Desktop(props: MacActions) {
       <TopBar
         title={state.currentTitle}
         setLogin={props.setLogin}
-        shutMac={props.shutMac}
-        sleepMac={props.sleepMac}
-        restartMac={props.restartMac}
         toggleSpotlight={toggleSpotlight}
         hide={state.hideDockAndTopbar}
         setSpotlightBtnRef={setSpotlightBtnRef}
@@ -260,9 +257,9 @@ export default function Desktop(props: MacActions) {
       </div>
 
       {/* Good afternoon Jam */}
-      <div className="fixed inset-0 flex items-center justify-center">
+      {/* <div className="fixed inset-0 flex items-center justify-center">
         <Jam />
-      </div>
+      </div> */}
 
       {/* Spotlight */}
       {state.spotlight && (

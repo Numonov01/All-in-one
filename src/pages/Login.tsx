@@ -1,66 +1,154 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  IconButton,
+  InputAdornment
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { wallpapers, user } from "~/configs";
-import type { MacActions } from "~/types";
+import type { LoginActions } from "~/types";
 
-export default function Login(props: MacActions) {
+const VITE_API_URL = import.meta.env.VITE_API_URL;
+
+export default function Login(props: LoginActions) {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [sign, setSign] = useState("Click to enter");
+  const [sign, setSign] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const dark = useStore((state) => state.dark);
 
-  const keyPress = (e: React.KeyboardEvent) => {
-    const keyCode = e.key;
-    if (keyCode === "Enter") loginHandle();
+  const keyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") loginHandle();
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setPassword(e.target.value);
-  };
-
-  const loginHandle = () => {
-    if (user.password === "" || user.password === password) {
-      // not set password or password correct
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
       props.setLogin(true);
-    } else if (password !== "") {
-      // password not null and incorrect
+    }
+  }, []);
+
+  const loginHandle = async () => {
+    try {
+      const response = await axios.post(`${VITE_API_URL}/api/auth/login`, {
+        username,
+        password
+      });
+      // console.log("Login muvaffaqiyatli:", response.data);
+      props.setLogin(true);
+    } catch (error) {
       setSign("Incorrect password");
+      // console.error("Login xatosi:", error);
     }
   };
 
   return (
-    <div
-      className="size-full login text-center"
-      style={{
-        background: `url(${
-          dark ? wallpapers.night : wallpapers.day
-        }) center/cover no-repeat`
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      height="100vh"
+      sx={{
+        backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center"
       }}
-      onClick={() => loginHandle()}
     >
-      <div className="inline-block w-auto relative top-1/2 -mt-40">
-        {/* Avatar */}
-        <img className="rounded-full size-24 my-0 mx-auto" src={user.avatar} alt="img" />
-        <div className="font-semibold mt-2 text-xl text-white">{user.name}</div>
+      <Box
+        sx={{
+          borderRadius: 2,
+          textAlign: "center",
+          width: 400
+        }}
+      >
+        {/* Logo */}
+        <img
+          src={user.avatar}
+          alt="User Avatar"
+          style={{ width: 37, height: 64, margin: "0 auto" }}
+        />
+        <Typography variant="h6" color="white" mt={2}>
+          Secure. Robust. Scalable.
+        </Typography>
+        <Typography color="#FFFFFFA3" mt={1}>
+          Effortless Data Management for Seamless Operations.
+        </Typography>
 
-        {/* Password Input */}
-        <div className="mx-auto grid grid-cols-5 w-44 h-8 mt-4 rounded-md backdrop-blur-2xl bg-gray-300/50">
-          <input
-            className="text-sm text-white col-start-1 col-span-4 no-outline bg-transparent px-2"
-            type="password"
-            placeholder="Enter Password"
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={keyPress}
-            value={password}
-            onChange={handleInputChange}
-          />
-          <div className="col-start-5 col-span-1 flex-center">
-            <span className="i-bi:question-square-fill text-white ml-1" />
-          </div>
-        </div>
+        {/* Username Field */}
+        <Typography color="white" mt={2} align="left">
+          Username *
+        </Typography>
+        <TextField
+          placeholder="Enter username"
+          variant="outlined"
+          fullWidth
+          margin="dense"
+          size="small"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          onKeyDown={keyPress}
+          error={!!sign}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+              bgcolor: "white"
+            }
+          }}
+        />
 
-        <div mt-2 cursor-pointer text="sm gray-200">
-          {sign}
-        </div>
-      </div>
-    </div>
+        {/* Password Field */}
+        <Typography color="white" mt={2} align="left">
+          Password *
+        </Typography>
+        <TextField
+          type={showPassword ? "text" : "password"}
+          placeholder="Enter password"
+          variant="outlined"
+          fullWidth
+          margin="dense"
+          size="small"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={keyPress}
+          error={!!sign}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+              bgcolor: "white"
+            }
+          }}
+        />
+
+        {/* Login Button */}
+        <Button
+          variant="contained"
+          fullWidth
+          sx={{ mt: 2, bgcolor: "#007AFF", color: "white", borderRadius: 3 }}
+          onClick={loginHandle}
+        >
+          Sign in
+        </Button>
+
+        {/* Sign Status */}
+        {sign && (
+          <Typography variant="body2" color="error" mt={2}>
+            {sign}
+          </Typography>
+        )}
+      </Box>
+    </Box>
   );
 }

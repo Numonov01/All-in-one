@@ -11,6 +11,7 @@ import {
   IconButton
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { LaunchpadData } from "~/types";
 
 interface AboutPcModalProps {
   open: boolean;
@@ -51,7 +52,7 @@ const networkData = [
   }
 ];
 
-const AboutPcModal: React.FC<AboutPcModalProps> = ({ open, onClose }) => {
+const AboutPc: React.FC<AboutPcModalProps> = ({ open, onClose }) => {
   const [tabIndex, setTabIndex] = useState(0);
 
   return (
@@ -280,4 +281,4 @@ const AboutPcModal: React.FC<AboutPcModalProps> = ({ open, onClose }) => {
   );
 };
 
-export default AboutPcModal;
+export default AboutPc;

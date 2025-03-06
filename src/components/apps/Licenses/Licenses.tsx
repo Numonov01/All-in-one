@@ -4,7 +4,7 @@ import { commonmark } from "@milkdown/preset-commonmark";
 import { gfm } from "@milkdown/preset-gfm";
 import { history } from "@milkdown/plugin-history";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
-import LicenseAppsTable from "./Table/AppsTable";
+import LicenseAppsTable from "./AppsTable";
 
 const MilkdownEditor = () => {
   const { licensesMd, setLicensesMd } = useStore((state) => ({

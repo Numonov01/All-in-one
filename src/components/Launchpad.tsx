@@ -1,4 +1,6 @@
 import { wallpapers, launchpadApps } from "~/configs";
+import { CloudUpload } from "@mui/icons-material";
+import { LaunchpadData } from "~/types";
 
 interface LaunchpadProps {
   show: boolean;
@@ -8,6 +10,18 @@ interface LaunchpadProps {
 const placeholderText = "Search";
 
 export default function Launchpad({ show, toggleLaunchpad }: LaunchpadProps) {
+  const [selectedApp, setSelectedApp] = useState<LaunchpadData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = (app: LaunchpadData) => {
+    setSelectedApp(app);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedApp(null);
+  };
   const dark = useStore((state) => state.dark);
 
   const [searchText, setSearchText] = useState("");
@@ -18,13 +32,13 @@ export default function Launchpad({ show, toggleLaunchpad }: LaunchpadProps) {
     const text = searchText.toLowerCase();
     const list = launchpadApps.filter((item) => {
       return (
-        item.title.toLowerCase().includes(text) || item.id.toLowerCase().includes(text)
+        item.name.toLowerCase().includes(text) || item.id.toLowerCase().includes(text)
       );
     });
     return list;
   };
 
-  const close = show ? "" : "opacity-0 invisible transition-opacity duration-200";
+  const close = show ? "" : "invisible";
 
   return (
     <div
@@ -33,7 +47,7 @@ export default function Launchpad({ show, toggleLaunchpad }: LaunchpadProps) {
       style={{
         backgroundImage: `url(${dark ? wallpapers.night : wallpapers.day})`
       }}
-      onClick={() => toggleLaunchpad(false)}
+      onClick={() => toggleLaunchpad(true)}
     >
       <div className="size-full absolute bg-gray-900/20 backdrop-blur-2xl">
         <div
@@ -59,23 +73,32 @@ export default function Launchpad({ show, toggleLaunchpad }: LaunchpadProps) {
         </div>
 
         <div className="max-w-[1100px] mx-auto mt-8 w-full px-4 sm:px-10 grid grid-cols-5 gap-4 ">
-          {search().map((app) => (
-            <div key={`launchpad-${app.id}`} h="32 sm:36" flex="~ col">
+          {search().map((item) => (
+            <div key={`launchpad-${item.id}`} className="h-32 sm:h-36 flex flex-col">
               <a
-                className="w-14 sm:w-20 mx-auto"
-                href={app.link}
-                target="_blank"
-                rel="noreferrer"
-                onClick={(e) => e.stopPropagation()}
+                className="w-14 text-white sm:w-20 mx-auto cursor-pointer"
+                onClick={() => handleOpenModal(item)}
               >
-                <img src={app.img} alt={app.title} title={app.title} />
+                <img src={`${item.icon}`} alt={item?.name} />
               </a>
-              <span m="t-2 x-auto" text="white xs sm:sm">
-                {app.title}
+              <span className="mt-2 flex items-center gap-2 cursor-pointer text-white text-sm sm:text-base">
+                {!item?.server_id && <CloudUpload />}
+                <p className="text-[16px] font-medium">{item?.name}</p>
               </span>
             </div>
           ))}
         </div>
+        {isModalOpen &&
+          selectedApp &&
+          (selectedApp.server_id ? (
+            <AppModal open={isModalOpen} onClose={handleCloseModal} app={selectedApp} />
+          ) : (
+            <InstallModal
+              open={isModalOpen}
+              onClose={handleCloseModal}
+              app={selectedApp}
+            />
+          ))}
       </div>
     </div>
   );

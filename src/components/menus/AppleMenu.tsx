@@ -19,10 +19,10 @@ export default function AppleMenu({
   return (
     <div className="menu-box left-2 w-56" ref={ref}>
       <MenuItemGroup>
-        <MenuItem>About This Mac</MenuItem>
+        <MenuItem>About This Application</MenuItem>
       </MenuItemGroup>
       <MenuItemGroup border={false}>
-        <MenuItem onClick={logout}>Lock Screen</MenuItem>
+        <MenuItem onClick={logout}>Log Out</MenuItem>
       </MenuItemGroup>
     </div>
   );

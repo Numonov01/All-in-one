@@ -1,7 +1,7 @@
 export interface LaunchpadData {
   id: string;
-  title: string;
-  img: string;
+  name: string;
   icon?: string;
-  link?: string;
+  version: string;
+  server_id?: boolean;
 }

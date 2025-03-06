@@ -1,9 +1,10 @@
 import type { UserData } from "~/types";
 
 const user: UserData = {
-  name: "Numonov Tohir",
-  avatar: "img/ui/avatar.jpg",
-  password: ""
+  name: "Secure. Robust. Scalable.",
+  avatar: "img/ui/Components.png",
+  password: "",
+  username: ""
 };
 
 export default user;

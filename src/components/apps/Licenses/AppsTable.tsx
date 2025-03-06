@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Search, Tune, ViewColumn } from "@mui/icons-material";
-import UploadModal from "~/components/modals/upload";
+import UploadModal from "~/components/apps/Licenses/Upload";
 
 // Table ustunlari
 const columns = [

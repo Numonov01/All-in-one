@@ -7,15 +7,21 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Chip,
-  Checkbox,
   TablePagination,
   TextField,
   Button
 } from "@mui/material";
 import { Tune, ViewColumn, Search, Add } from "@mui/icons-material";
-import AboutPcModal from "./AboutPcModal";
+import AboutPcModal from "../Installed/AboutPc";
+import UserModal from "./UserEdit";
+
+type User = {
+  id: number;
+  fullName: string;
+  email: string;
+  pcName: string;
+  registerDate: string;
+};
 
 // Table ustunlari
 const columns = [
@@ -28,13 +34,7 @@ const columns = [
 
 // Zustand store
 interface TableState {
-  data: {
-    id: number;
-    fullName: string;
-    email: string;
-    pcName: string;
-    registerDate: string;
-  }[];
+  data: User[];
 }
 
 const useTableStore = create<TableState>(() => ({
@@ -42,69 +42,69 @@ const useTableStore = create<TableState>(() => ({
     {
       id: 1,
       fullName: "Alex Pixel",
-      email: "john.smith@usefuldata.com",
-      pcName: "Echo-PC",
+      email: "jane.doe@example.com",
+      pcName: "Luna-PC",
       registerDate: "12.02.2024"
     },
     {
       id: 2,
-      fullName: "Alex Pixel",
+      fullName: "Jordan Tube",
       email: "john.smith@usefuldata.com",
       pcName: "Echo-PC",
       registerDate: "12.02.2024"
     },
     {
       id: 3,
-      fullName: "Alex Pixel",
-      email: "john.smith@usefuldata.com",
-      pcName: "Echo-PC",
+      fullName: "Sam Forge",
+      email: "emily.jones@availabledata.com",
+      pcName: "Zephyr-PC",
       registerDate: "12.02.2024"
     },
     {
       id: 4,
-      fullName: "Alex Pixel",
-      email: "john.smith@usefuldata.com",
+      fullName: "Taylor Office",
+      email: "michael.brown@quicknote.com",
       pcName: "Echo-PC",
       registerDate: "12.02.2024"
     },
     {
       id: 5,
-      fullName: "Alex Pixel",
-      email: "john.smith@usefuldata.com",
-      pcName: "Echo-PC",
+      fullName: "Jamie Shield",
+      email: "sarah.white@contentready.com",
+      pcName: "Quantum-PC",
       registerDate: "12.02.2024"
     },
     {
       id: 6,
-      fullName: "Alex Pixel",
-      email: "john.smith@usefuldata.com",
-      pcName: "Echo-PC",
+      fullName: "Sam Forge",
+      email: "emily.jones@availabledata.com",
+      pcName: "Zephyr-PC",
       registerDate: "12.02.2024"
     },
     {
       id: 7,
-      fullName: "Alex Pixel",
+      fullName: "Jordan Tube",
       email: "john.smith@usefuldata.com",
       pcName: "Echo-PC",
       registerDate: "12.02.2024"
     },
     {
       id: 8,
-      fullName: "Alex Pixel",
-      email: "john.smith@usefuldata.com",
-      pcName: "Echo-PC",
+      fullName: "Sam Forge",
+      email: "emily.jones@availabledata.com",
+      pcName: "Zephyr-PC",
       registerDate: "12.02.2024"
     },
     {
       id: 9,
-      fullName: "Alex Pixel",
+      fullName: "Jordan Tube",
       email: "john.smith@usefuldata.com",
       pcName: "Echo-PC",
       registerDate: "12.02.2024"
     },
     {
       id: 10,
-      fullName: "Alex Pixel",
+      fullName: "Jordan Tube",
       email: "john.smith@usefuldata.com",
       pcName: "Echo-PC",
       registerDate: "12.02.2024"
@@ -114,21 +114,20 @@ const useTableStore = create<TableState>(() => ({
 
 const UserContactsTable = () => {
   const { data } = useTableStore();
-  const [selected, setSelected] = useState<number[]>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [modalOpen, setModalOpen] = useState(false);
-
-  const handleSelect = (id: number) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   const filteredData = data.filter((row) =>
     row.fullName.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleOpenModal = (user: User | null = null) => {
+    setSelectedUser(user);
+    setModalOpen(true);
+  };
 
   return (
     <div>
@@ -156,6 +155,7 @@ const UserContactsTable = () => {
           <Button
             startIcon={<Add />}
             variant="contained"
+            onClick={() => handleOpenModal(null)}
             sx={{
               textTransform: "none",
               fontWeight: 400,
@@ -202,14 +202,13 @@ const UserContactsTable = () => {
                         textTransform: "none"
                       }}
                       color="primary"
-                      onClick={() => setModalOpen(true)}
+                      onClick={() => handleOpenModal(row)}
                     >
                       Edit
                     </Button>
                   </TableCell>
                 </TableRow>
               ))}
-            <AboutPcModal open={modalOpen} onClose={() => setModalOpen(false)} />
           </TableBody>
         </MuiTable>
       </TableContainer>
@@ -227,6 +226,9 @@ const UserContactsTable = () => {
           setPage(0);
         }}
       />
+
+      {/* User Modal */}
+      <UserModal open={modalOpen} setOpen={setModalOpen} user={selectedUser} />
     </div>
   );
 };
