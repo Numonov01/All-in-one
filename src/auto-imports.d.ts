@@ -7,9 +7,9 @@ export {}
 declare global {
   const AboutPC: (typeof import("./components/apps/Table/AboutPC"))["default"]
   const AboutPc: typeof import('./components/apps/Installed/AboutPc')['default']
-  const AboutPcModal: (typeof import("./components/apps/Installed/AboutPc"))["default"]
+  const AboutPcModal: typeof import('./components/apps/Table/AboutPcModal')['default']
   const AppModal: typeof import('./components/Lounchpad/AppModal')['default']
-  const AppTable: (typeof import("./components/apps/Table/AppTable"))["default"]
+  const AppTable: typeof import('./components/apps/Table/AppTable')['default']
   const AppWindow: typeof import('./components/AppWindow')['default']
   const AppleMenu: typeof import('./components/menus/AppleMenu')['default']
   const AppsTable: typeof import('./components/apps/Licenses/AppsTable')['default']
